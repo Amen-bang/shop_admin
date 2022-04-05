@@ -16,8 +16,8 @@
         <!-- 折叠按钮 -->
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!--侧边栏菜单区域-->
-        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409EFF"
-          :unique-opened="true" :collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409EFF" :unique-opened="true"
+          :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
           <!--1级菜单，index绑定一个唯一值，保证不会打开一个导航栏影响其他导航栏，使用item.id另其成为唯一同时要另其为字符串形式-->
           <el-submenu :index="item.id + ''" v-for="item in menuList" :key="item.id">
             <!--1级菜单模板区域-->
@@ -28,7 +28,7 @@
               <span>{{item.authName}}</span>
             </template>
             <!--2级菜单-->
-            <el-menu-item :index="item.id + ''" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item :index=" '/' +subItem.path" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
                 <!--图标-->
                 <i class="el-icon-menu"></i>
@@ -53,7 +53,14 @@ export default {
   data () {
     return {
       // 左侧菜单数据
-      menuList: [],
+      menuList: [
+        // 构造假数据
+        {
+          'id': '125',
+          'authName': '用户管理',
+          'children': [{ 'id': '125', 'authName': '用户列表', 'path': 'users' }]
+        }
+      ],
       iconsObj: {
         '125': 'iconfont icon-user',
         '103': 'iconfont icon-tijikongjian',
