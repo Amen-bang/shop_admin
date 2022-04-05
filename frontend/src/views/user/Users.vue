@@ -10,9 +10,9 @@
 
     <!--卡片视图区域-->
     <el-card>
+      <!--搜索与添加区域-->
       <el-row :gutter="24">
         <el-col :span="8">
-          <!--搜索与添加区域-->
           <el-input placeholder="请输入内容">
             <el-button slot="append" icon="el-icon-search" @click="getUserList"></el-button>
           </el-input>
@@ -21,12 +21,50 @@
           <el-button type="primary" @click="addDialogVisible = true">添加用户</el-button>
         </el-col>
       </el-row>
+
+      <!-- 用户列表区域 -->
+      <el-table :data="userList" border stripe>
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column label="姓名" prop="username"></el-table-column>
+        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="电话" prop="phone"></el-table-column>
+        <el-table-column label="角色" prop="role_name"></el-table-column>
+        <el-table-column label="状态" prop="mg_state"></el-table-column>
+        <el-table-column label="操作"></el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      // 获取用户列表的参数对象
+      queryInfo: {
+        query: '',
+        // 当前页数
+        pagenum: 1,
+        // 当前页数据个数
+        pagesize: 2
+      },
+      userList: [],
+      total: 0
+    }
+  },
+  create () {
+    this.getUserList()
+  },
+  methods: {
+    async getUserList() {
+      const { data: res } = await this.$http.get('users', { params: this.queryInfo })
+      // console.log(res)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.userList = res.data.users
+      this.total = res.data.total
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
