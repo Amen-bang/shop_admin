@@ -8,12 +8,37 @@
       </div>
       <el-button type="info" @click="loginOut">退出</el-button>
     </el-header>
+
     <!--页面主题区域-->
     <el-container>
       <!--侧边栏-->
-      <el-aside></el-aside>
+      <el-aside width="200px">
+        <!--侧边栏菜单区域-->
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409EFF">
+          <!--1级菜单-->
+          <el-submenu index="1">
+            <!--1级菜单模板区域-->
+            <template slot="title">
+              <!--图标-->
+              <i class="el-icon-location"></i>
+              <!--文本-->
+              <span>导航一</span>
+            </template>
+            <!--2级菜单-->
+            <el-menu-item index="1-1">
+              <template slot="title">
+                <!--图标-->
+                <i class="el-icon-menu"></i>
+                <!--文本-->
+                <span>选项一</span>
+              </template>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
       <el-main></el-main>
     </el-container>
+
   </el-container>
 </template>
 
