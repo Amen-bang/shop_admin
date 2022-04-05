@@ -25,4 +25,5 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
+// 挂载完路由导航守卫以后再重新载入路由
 export default router
