@@ -11,7 +11,7 @@ import './assets/css/global.css'
 import './assets/fonts/iconfont.css'
 
 // 配置请求根路径
-axios.defaults.baseURl = 'http://127.0.0.1:8080/api'
+axios.defaults.baseURl = 'http://127.0.0.1:1123/api'
 // 配置axios请求拦截器添加token，保证拥有获取数据的权限
 axios.interceptors.request.use(config => {
   // 为请求头对象，添加 Token 验证的 Authorization 字段
