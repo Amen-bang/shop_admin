@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>这是用户列表</h1>
     <!-- 面包屑导航 -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
@@ -29,8 +28,28 @@
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="phone"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
-        <el-table-column label="状态" prop="mg_state"></el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="状态" prop="mg_state">
+          <template slot-scope="scope">
+            <!-- scope能够将该列的数据全部打印出来 -->
+            <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)"></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="185px">
+          <template slot-scope="scope">
+            <!--修改按钮-->
+            <el-tooltip  effect="dark" content="修改" placement="top" :enterable="false">
+              <el-button @click="showEditDialog(scope.row.id)"  type="primary" icon="el-icon-edit" size="mini"></el-button>
+            </el-tooltip>
+            <!--删除按钮-->
+            <el-tooltip  effect="dark" content="删除" placement="top" :enterable="false">
+              <el-button type="danger" @click="removeUserById(scope.row.id)" icon="el-icon-delete" size="mini"></el-button>
+            </el-tooltip>
+            <!--分配角色按钮-->
+            <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+              <el-button  @click="setRole(scope.row)" type="warning" icon="el-icon-setting" size="mini"></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
   </div>
@@ -48,7 +67,16 @@ export default {
         // 当前页数据个数
         pagesize: 2
       },
-      userList: [],
+      // 弄点假数据
+      userList: [
+        {
+          'username': '陈弟弟',
+          'email': '2805478472@qq.com',
+          'phone': '13022000802',
+          'role_name': '超级管理员',
+          'mg_state': true
+        }
+      ],
       total: 0
     }
   },
