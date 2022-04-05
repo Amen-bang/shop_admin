@@ -51,6 +51,17 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页区域 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.pagenum"
+        :page-sizes="[1, 2, 5, 10]"
+        :page-size="queryInfo.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -77,19 +88,43 @@ export default {
           'mg_state': true
         }
       ],
-      total: 0
+      total: 1
     }
   },
   create () {
     this.getUserList()
   },
   methods: {
+    // 发起请求获取用户列表
     async getUserList() {
       const { data: res } = await this.$http.get('users', { params: this.queryInfo })
       // console.log(res)
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       this.userList = res.data.users
       this.total = res.data.total
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange(newSize) {
+      // console.log(newSize)
+      this.queryInfo.pagesize = newSize
+      this.getUserList()
+    },
+    // 监听页码值改变的事件
+    handleCurrentChange(newPage) {
+      // console.log(newPage)
+      this.queryInfo.pagenum = newPage
+      this.getUserList()
+    },
+    // 监听Switch状态的改变
+    async userStateChanged(userInfo) {
+      // console.log(userInfo)
+      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+      // console.log(res)
+      if (res.meta.status !== 200) {
+        userInfo.mg_state = !userInfo.mg_state
+        return this.$message.error('更新用户状态失败！')
+      }
+      this.$message.success('更新用户状态成功！')
     }
   }
 }
