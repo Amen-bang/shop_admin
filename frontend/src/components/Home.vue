@@ -27,8 +27,8 @@
               <!--文本-->
               <span>{{item.authName}}</span>
             </template>
-            <!--2级菜单-->
-            <el-menu-item :index=" '/' +subItem.path" v-for="subItem in item.children" :key="subItem.id">
+            <!--2级菜单，saveNavState将path存放到sessionstore-->
+            <el-menu-item :index=" '/' +subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' +subItem.path)">
               <template slot="title">
                 <!--图标-->
                 <i class="el-icon-menu"></i>
@@ -97,6 +97,11 @@ export default {
     // 点击按钮切换菜单的折叠与展开
     toggleCollapse () {
       this.isCollapse = !this.isCollapse
+    },
+    // 保存被激活的链接
+    saveNavState (activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
     }
   }
 }
