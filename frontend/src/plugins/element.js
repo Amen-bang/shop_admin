@@ -5,7 +5,8 @@ import {
   Menu, Submenu, MenuItem,
   Breadcrumb, BreadcrumbItem,
   Card, Row, Col, Table, TableColumn,
-  Switch, Tooltip, Pagination
+  Switch, Tooltip, Pagination,
+  Dialog, MessageBox
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -15,5 +16,6 @@ Vue.use(Menu).use(Submenu).use(MenuItem)
 Vue.use(Breadcrumb).use(BreadcrumbItem)
 Vue.use(Card).use(Row).use(Col).use(Table).use(TableColumn)
 Vue.use(Switch).use(Tooltip).use(Pagination)
+Vue.use(Dialog).use(MessageBox)
 // 配置全局弹窗组件调用
 Vue.prototype.$message = Message
