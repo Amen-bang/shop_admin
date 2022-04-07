@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,9 +28,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 项目子应用
     'users',
+    # 功能模块
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,6 +43,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    #权限验证
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'    # 默认权限为验证用户
+    ],
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # 访问令牌的有效时间
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # 刷新令牌的有效时间
+    'BLACKLIST_AFTER_ROTATION': True, # 若为True，刷新后的token将添加到黑名单中
+    'ALGORITHM': 'HS256', # 对称算法：HS256 HS384 HS512 非对称算法：RSA
+}
+
+# 白名单
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+)
+CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -64,14 +92,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-     'default': {  
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'shop',        #你的数据库名称 数据库需要自己提前建好
-         'USER': 'root',        #你的数据库用户名
-         'PASSWORD': '123456',        #你的数据库密码
-         'HOST': '',        #你的数据库主机，留空默认为localhost
-         'PORT': '3306',        #你的数据库端口
-         }
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shop',        #你的数据库名称 数据库需要自己提前建好
+        'USER': 'root',        #你的数据库用户名
+        'PASSWORD': '123456',        #你的数据库密码
+        'HOST': '',        #你的数据库主机，留空默认为localhost
+        'PORT': '3306',        #你的数据库端口
+    }
 }
 
 
@@ -112,3 +140,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+AUTH_USER_MODEL = 'users.User'
+AUTHENTICATION_BACKENDS = ('users.utils.CustomBackend',)  # 指定认证后台
