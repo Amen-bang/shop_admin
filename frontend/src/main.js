@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 // 按需引入ElementUI
-import '../plugins/element.js'
+import './plugins/element.js'
 // 导入axios
 import axios from 'axios'
 // 导入全局样式表

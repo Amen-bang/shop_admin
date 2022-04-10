@@ -58,7 +58,10 @@ export default {
         {
           'id': '125',
           'authName': '用户管理',
-          'children': [{ 'id': '125', 'authName': '用户列表', 'path': 'users' }]
+          'children': [
+            { 'id': '125', 'authName': '用户列表', 'path': 'users' },
+            { 'id': '125', 'authName': '用户权限', 'path': 'power' }
+          ]
         }
       ],
       iconsObj: {
