@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 项目子应用
     'users',
+    'api',
     # 功能模块
     'rest_framework',
     'corsheaders',
@@ -49,9 +50,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     #权限验证
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'    # 默认权限为验证用户
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated'    # 默认权限为验证用户
+    # ],
 }
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), # 访问令牌的有效时间
@@ -97,7 +98,7 @@ DATABASES = {
         'NAME': 'shop',        #你的数据库名称 数据库需要自己提前建好
         'USER': 'root',        #你的数据库用户名
         'PASSWORD': '123456',        #你的数据库密码
-        'HOST': '',        #你的数据库主机，留空默认为localhost
+        'HOST': '47.106.121.30',        #你的数据库主机，留空默认为localhost
         'PORT': '3306',        #你的数据库端口
     }
 }

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView, TokenVerifyView)
 from users.utils import MyTokenObtainPairView
@@ -12,4 +12,6 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # 自定义令牌
     path('login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # 包含子路由
+    path('', include('api.urls'))
 ]

@@ -70,7 +70,7 @@ export default {
         if (!valid) return
 
         // 发起请求
-        const { data: res } = await this.$http.post('login', this.loginForm)
+        const { data: res } = await this.$http.post('login/', this.loginForm)
 
         // 对返回结果做判断，做弹框提示
         if (res.meta.status !== 200) {

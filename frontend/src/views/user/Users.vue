@@ -86,6 +86,9 @@
           <el-button type="primary" @click="addUser">确 定</el-button>
         </span>
       </el-dialog>
+
+      <!-- 修改用户的对话框 -->
+
     </el-card>
   </div>
 </template>
@@ -217,6 +220,14 @@ export default {
         this.addDialogVisible = false
         this.getUserList()
       })
+    },
+    // 展示修改用户的对话框
+    async showEditDialog (id) {
+      const { data: res } = await this.$http.get('users/' + id)
+      if (res.meta.status !== 200) return this.$message.error('查询用户信息失败!')
+
+      this.editForm = res.data
+      this.editDialogVisible = true
     }
   }
 }
