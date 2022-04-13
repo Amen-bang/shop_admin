@@ -16,6 +16,8 @@ Vue.use(Menu).use(Submenu).use(MenuItem)
 Vue.use(Breadcrumb).use(BreadcrumbItem)
 Vue.use(Card).use(Row).use(Col).use(Table).use(TableColumn)
 Vue.use(Switch).use(Tooltip).use(Pagination)
-Vue.use(Dialog).use(MessageBox)
+Vue.use(Dialog)
 // 配置全局弹窗组件调用
 Vue.prototype.$message = Message
+// 配置删除弹窗
+Vue.prototype.$confirm = MessageBox

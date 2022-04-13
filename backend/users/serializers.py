@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
@@ -27,3 +28,25 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return_data['meta'] = {'msg':'登录成功', 'status':200}
         return return_data
 
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+        用户表序列化器
+    """
+
+    class Meta:
+        # 指定生成序列化字段的模型类
+        model = User
+        # 指定字段
+        fields = ('id', 'username', 'mobile', 'email', 'password')
+        extra_kwargs = {
+            "password": {
+                'write_only': True,
+                'max_length': 20,
+                'min_length': 8
+            },
+            'username': {
+                'max_length': 20,
+                'min_length': 5
+            }
+        }

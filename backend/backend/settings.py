@@ -65,6 +65,7 @@ SIMPLE_JWT = {
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8080',
     'http://localhost:8080',
+    'http://192.168.91.131:8080',
 )
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
 
