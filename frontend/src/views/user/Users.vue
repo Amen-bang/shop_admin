@@ -26,12 +26,12 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="姓名" prop="username"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="电话" prop="phone"></el-table-column>
+        <el-table-column label="电话" prop="mobile"></el-table-column>
         <el-table-column label="角色" prop="role_name"></el-table-column>
-        <el-table-column label="状态" prop="mg_state">
+        <el-table-column label="状态" prop="is_delete">
           <template slot-scope="scope">
             <!-- scope能够将该列的数据全部打印出来 -->
-            <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.is_delete" @change="userStateChanged(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="185px">
@@ -56,8 +56,8 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="queryInfo.pagenum"
-        :page-sizes="[1, 2, 5, 10]"
+        :current-page="queryInfo.page"
+        :page-sizes="[5, 10]"
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
@@ -138,19 +138,19 @@ export default {
       queryInfo: {
         query: '',
         // 当前页数
-        pagenum: 1,
+        page: 1,
         // 当前页数据个数
-        pagesize: 2
+        pagesize: 5
       },
       // 弄点假数据
       userList: [
-        {
-          'username': '陈弟弟',
-          'email': '2805478472@qq.com',
-          'phone': '13022000802',
-          'role_name': '超级管理员',
-          'mg_state': true
-        }
+        // {
+        //   'username': '陈弟弟',
+        //   'email': '2805478472@qq.com',
+        //   'mobile': '13022000802',
+        //   'role_name': '超级管理员',
+        //   'is_delete': true
+        // }
       ],
       total: 1,
       // 控制添加用户的对话框的显示与隐藏
@@ -197,18 +197,18 @@ export default {
       }
     }
   },
-  create () {
+  created () {
     // 当页面加载的时侯马上调用getUserList获取用户列表
     this.getUserList()
   },
   methods: {
     // 发起请求获取用户列表
     async getUserList () {
-      const { data: res } = await this.$http.get('users', { params: this.queryInfo })
-      // console.log(res)
+      const { data: res } = await this.$http.get('users/user/', { params: this.queryInfo })
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.userList = res.data.users
-      this.total = res.data.total
+      console.log(res)
+      this.userList = res.users
+      this.total = res.total
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
@@ -219,16 +219,16 @@ export default {
     // 监听页码值改变的事件
     handleCurrentChange (newPage) {
       // console.log(newPage)
-      this.queryInfo.pagenum = newPage
+      this.queryInfo.page = newPage
       this.getUserList()
     },
     // 监听Switch状态的改变
     async userStateChanged (userInfo) {
       // console.log(userInfo)
-      const { data: res } = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+      const res = await this.$http.put(`users/user/${userInfo.id}/state/${userInfo.is_delete}`)
       // console.log(res)
-      if (res.meta.status !== 200) {
-        userInfo.mg_state = !userInfo.mg_state
+      if (res.status !== 200) {
+        userInfo.is_delete = !userInfo.is_delete
         return this.$message.error('更新用户状态失败！')
       }
       this.$message.success('更新用户状态成功！')
@@ -243,7 +243,7 @@ export default {
         // console.log(valid)
         if (!valid) return
         // 可以发起添加用户的请求
-        const { data: res } = await this.$http.post('users', this.addForm)
+        const { data: res } = await this.$http.post('users/user/', this.addForm)
         // console.log(res)
         if (res.meta.status !== 201) return this.$message.error('添加用户失败！')
         this.$message.success('添加用户成功!')
@@ -254,8 +254,8 @@ export default {
     },
     // 展示修改用户的对话框
     async showEditDialog (id) {
-      const { data: res } = await this.$http.get('users/' + id)
-      if (res.meta.status !== 200) return this.$message.error('查询用户信息失败!')
+      const res = await this.$http.get('users/user/' + id)
+      if (res.status !== 200) return this.$message.error('查询用户信息失败!')
 
       this.editForm = res.data
       this.editDialogVisible = true
@@ -270,11 +270,11 @@ export default {
         // console.log(valid)
         if (!valid) return
         // 可以发起修改用户的请求
-        const { data: res } = await this.$http.put('users/' + this.editForm.id, {
+        const res = await this.$http.put('users/user/' + this.editForm.id, {
           email: this.editForm.email, mobile: this.editForm.mobile
         })
         // console.log(res)
-        if (res.meta.status !== 200) return this.$message.error('更新用户信息失败!')
+        if (res.status !== 200) return this.$message.error('更新用户信息失败!')
 
         // 隐藏添加用户的对话框
         this.editDialogVisible = false
@@ -299,8 +299,8 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const { data: res } = await this.$http.delete('users/' + id)
-      if (res.meta.status !== 200) return this.$message.error('删除用户失败！')
+      const res = await this.$http.delete('users/user/' + id)
+      if (res.status !== 204) return this.$message.error('删除用户失败！')
       this.$message.success('删除用户成功!')
       // 刷新用户列表
       this.getUserList()

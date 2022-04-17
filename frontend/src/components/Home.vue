@@ -53,48 +53,7 @@ export default {
   data () {
     return {
       // 左侧菜单数据
-      menuList: [
-        // // 构造假数据
-        // {
-        //   'id': '125',
-        //   'authName': '用户管理',
-        //   'children': [
-        //     { 'id': '125', 'authName': '用户列表', 'path': 'users' }
-        //   ]
-        // },
-        // {
-        //   'id': '103',
-        //   'authName': '权限管理',
-        //   'children': [
-        //     { 'id': '125', 'authName': '权限管理', 'path': 'users' },
-        //     { 'id': '125', 'authName': '角色管理', 'path': 'power' }
-        //   ]
-        // },
-        // {
-        //   'id': '101',
-        //   'authName': '商品管理',
-        //   'children': [
-        //     { 'id': '125', 'authName': '用户列表', 'path': 'users' },
-        //     { 'id': '125', 'authName': '用户权限', 'path': 'power' }
-        //   ]
-        // },
-        // {
-        //   'id': '102',
-        //   'authName': '订单管理',
-        //   'children': [
-        //     { 'id': '125', 'authName': '用户列表', 'path': 'users' },
-        //     { 'id': '125', 'authName': '用户权限', 'path': 'power' }
-        //   ]
-        // },
-        // {
-        //   'id': '145',
-        //   'authName': '数据统计',
-        //   'children': [
-        //     { 'id': '125', 'authName': '用户列表', 'path': 'users' },
-        //     { 'id': '125', 'authName': '用户权限', 'path': 'power' }
-        //   ]
-        // }
-      ],
+      menuList: [],
       iconsObj: {
         '1': 'iconfont icon-user',
         '2': 'iconfont icon-tijikongjian',
@@ -123,7 +82,7 @@ export default {
     },
     // 获取所有的菜单
     async getMenuList () {
-      const { data: res } = await this.$http.get('menus/')
+      const { data: res } = await this.$http.get('api/menus/')
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
       // console.log(res)
       this.menuList = res.data

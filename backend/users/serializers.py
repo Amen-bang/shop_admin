@@ -38,15 +38,36 @@ class UserSerializer(serializers.ModelSerializer):
         # 指定生成序列化字段的模型类
         model = User
         # 指定字段
-        fields = ('id', 'username', 'mobile', 'email', 'password')
+        fields = ('id', 'username', 'mobile', 'email', 'role', 'is_delete','password')
         extra_kwargs = {
             "password": {
-                'write_only': True,
+                'required': False,
+                'write_only': True,  # 不参与序列化，只参与反序列化
                 'max_length': 20,
                 'min_length': 8
             },
-            'username': {
+            "username": { 
+                'required': False,
                 'max_length': 20,
-                'min_length': 5
+                'min_length': 2
+            },
+            "mobile":{
+                'required': False
             }
         }
+
+    # 手机号唯一值判断
+    def validate_mobile(self, attrs):
+        try:
+            user = User.objects.get(mobile=attrs)
+        except:
+            user = None
+        if user and self.context['request']._request.method == 'POST':
+            raise serializers.ValidationError('手机号已注册')
+        return attrs
+
+    def create(self, validated_data):
+        # 重写create方法进行密码加密
+        # 直接进行密码加密保存
+        user = User.objects.create_user(**validated_data)
+        return user
